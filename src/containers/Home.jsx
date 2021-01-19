@@ -16,7 +16,6 @@ const Home = () => {
     <h1>Loading...</h1>
   ) : (
     <div className="App">
-      <Header />
       <Search />
       {initialState.mylist.length > 0 && (
         <Categories title="Mi Lista">
@@ -41,7 +40,6 @@ const Home = () => {
           ))}
         </Carousel>
       </Categories>
-      <Footer />
     </div>
   );
 };
