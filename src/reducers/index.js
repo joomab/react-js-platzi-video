@@ -17,6 +17,24 @@ const reducer = (state, action) => {
         ...state,
         user: action.payload,
       };
+    case actions.LOGOUT_REQUEST:
+      return {
+        ...state,
+        user: action.payload,
+      };
+    case actions.REGISTER_REQUEST:
+      return {
+        ...state,
+        user: action.payload,
+      };
+    case actions.GET_VIDEO_SOURCE:
+      return {
+        ...state,
+        playing:
+          state.trends.find((item) => item.id === Number(action.payload)) ||
+          state.original.find((item) => item.id === Number(action.payload)) ||
+          [],
+      };
     default:
       return state;
   }
