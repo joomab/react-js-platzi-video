@@ -1,12 +1,17 @@
 const path = require("path");
-const HtmlWebPackPlugin = require("html-webpack-plugin");
+/* const HtmlWebPackPlugin = require("html-webpack-plugin"); Se comenta en el curso de SSR */
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const webpack = require("webpack");
 
 module.exports = {
-  entry: "./src/index.js",
+  entry: [
+    "./src/frontend/index.js",
+    "webpack-hot-middleware/client?path=/__webpack_hmr&timeout=2000&reload=true",
+  ],
+  mode: "development",
   output: {
     path: path.resolve(__dirname, "dist"),
-    filename: "bundle.js",
+    filename: "assets/app.js",
     publicPath: "/",
   },
   resolve: {
@@ -56,12 +61,13 @@ module.exports = {
     historyApiFallback: true,
   },
   plugins: [
-    new HtmlWebPackPlugin({
+    new webpack.HotModuleReplacementPlugin(), //Refrescado hot del app
+    /* new HtmlWebPackPlugin({
       template: "./public/index.html",
       filename: "./index.html",
-    }),
+    }), Se comenta en el curso de SSR */
     new MiniCssExtractPlugin({
-      filename: "assets/[name].css",
+      filename: "assets/app.css",
     }),
   ],
 };
