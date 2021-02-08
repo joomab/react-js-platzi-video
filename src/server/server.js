@@ -1,6 +1,7 @@
 import express from "express";
 import config from "./config";
 import webpack from "webpack";
+import helmet from "helmet";
 
 import React from "react";
 import { renderToString } from "react-dom/server";
@@ -31,7 +32,10 @@ if (env === "development") {
   app.use(webpackDevMiddleware(compiler, serverConfig));
   app.use(webpackHotMiddleware(compiler)); //Hace el hot code replacement en todo el proyecto
 } else {
-  /* app.use(express.static(`${__dirname}/public`)); */
+  app.use(express.static(`${__dirname}/public`));
+  app.use(helmet());
+  app.use(helmet.permittedCrossDomainPolicies()); //Bloqueando que no se pueda permitir eso. ver documentación
+  app.disable("x-powered-by"); //para que el navegador no sepa que tecnologías utiliza el sitio
 }
 
 const setResponse = (html, preloadedState) => {
