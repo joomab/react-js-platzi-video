@@ -12,7 +12,8 @@ import { StaticRouter } from "react-router-dom";
 import serverRoutes from "../frontend/routes/serverRoutes";
 import reducer from "../frontend/reducers";
 import initialState from "../frontend/initialState";
-import { render } from "node-sass";
+
+import getManifest from "./getManifest";
 
 const { env, port } = config;
 
@@ -32,18 +33,24 @@ if (env === "development") {
   app.use(webpackDevMiddleware(compiler, serverConfig));
   app.use(webpackHotMiddleware(compiler)); //Hace el hot code replacement en todo el proyecto
 } else {
+  app.use((req, res, next) => {
+    if (!req.hashManifest) req.hashManifest = getManifest();
+    next();
+  });
   app.use(express.static(`${__dirname}/public`));
   app.use(helmet());
   app.use(helmet.permittedCrossDomainPolicies()); //Bloqueando que no se pueda permitir eso. ver documentación
   app.disable("x-powered-by"); //para que el navegador no sepa que tecnologías utiliza el sitio
 }
 
-const setResponse = (html, preloadedState) => {
+const setResponse = (html, preloadedState, manifest) => {
+  const mainStyles = manifest ? manifest["main.css"] : "assets/app.css";
+  const mainBuild = manifest ? manifest["main.js"] : "assets/app.js";
   return `<!DOCTYPE html>
           <html>
             <head>
               <title>Platzi Video</title>
-              <link rel="stylesheet" href="assets/app.css" type="text/css">
+              <link rel="stylesheet" href="${mainStyles}" type="text/css">
             </head>
             <body>
               <div id="app">${html}</div>
@@ -52,7 +59,7 @@ const setResponse = (html, preloadedState) => {
                   preloadedState
                 ).replace(/</g, "\\u003c")}
               </script>
-              <script src="assets/app.js" type="text/javascript"></script>
+              <script src="${mainBuild}" type="text/javascript"></script>
             </body>
           </html>`;
 };
@@ -71,7 +78,7 @@ const renderApp = (req, res) => {
     "Content-Security-Policy",
     "default-src 'self'; img-src 'self' http://dummyimage.com; script-src 'self' 'sha256-8X58UX3cO5dlP3eLfHq78uIsUK3G6s+Og5UDymS27ko='; style-src-elem 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com"
   );
-  res.send(setResponse(html, preloadedState));
+  res.send(setResponse(html, preloadedState, req.hashManifest));
 };
 
 app.get("*", renderApp);
