@@ -2,20 +2,34 @@ const path = require("path");
 /* const HtmlWebPackPlugin = require("html-webpack-plugin"); Se comenta en el curso de SSR */
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const webpack = require("webpack");
+const CompressionWebpackPlugin = require("compression-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
+
+require("dotenv").config();
+
+const isDev = process.env.ENV === "development";
+const entry = ["./src/frontend/index.js"];
+
+if (isDev) {
+  entry.push(
+    "webpack-hot-middleware/client?path=/__webpack_hmr&timeout=2000&reload=true"
+  );
+}
 
 module.exports = {
-  entry: [
-    "./src/frontend/index.js",
-    "webpack-hot-middleware/client?path=/__webpack_hmr&timeout=2000&reload=true",
-  ],
-  mode: "development",
+  entry,
+  mode: process.env.ENV,
   output: {
-    path: path.resolve(__dirname, "dist"),
+    path: path.resolve(__dirname, "src/server/public"),
     filename: "assets/app.js",
     publicPath: "/",
   },
   resolve: {
     extensions: [".js", ".jsx"],
+  },
+  optimization: {
+    minimize: true,
+    minimizer: [new TerserPlugin()],
   },
   module: {
     rules: [
@@ -25,14 +39,6 @@ module.exports = {
         use: {
           loader: "babel-loader",
         },
-      },
-      {
-        test: /\.html$/,
-        use: [
-          {
-            loader: "html-loader",
-          },
-        ],
       },
       {
         test: /\.(s*)css$/,
@@ -61,7 +67,14 @@ module.exports = {
     historyApiFallback: true,
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(), //Refrescado hot del app
+    isDev ? new webpack.HotModuleReplacementPlugin() : () => {}, //Refrescado hot del app
+    !isDev
+      ? new CompressionWebpackPlugin({
+          //Vamos a comprimir nuestros assets en build
+          test: /\.js$|\.css$/,
+          filename: "[path].gz",
+        })
+      : () => {},
     /* new HtmlWebPackPlugin({
       template: "./public/index.html",
       filename: "./index.html",

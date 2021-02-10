@@ -67,7 +67,10 @@ const renderApp = (req, res) => {
       </StaticRouter>
     </Provider>
   );
-
+  res.set(
+    "Content-Security-Policy",
+    "default-src 'self'; img-src 'self' http://dummyimage.com; script-src 'self' 'sha256-8X58UX3cO5dlP3eLfHq78uIsUK3G6s+Og5UDymS27ko='; style-src-elem 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com"
+  );
   res.send(setResponse(html, preloadedState));
 };
 
@@ -75,5 +78,5 @@ app.get("*", renderApp);
 
 app.listen(port, (err) => {
   if (err) console.log(err);
-  else console.log("Server running in port 3000");
+  else console.log("Server running in port " + port);
 });
