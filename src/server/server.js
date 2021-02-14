@@ -46,6 +46,7 @@ if (env === "development") {
 const setResponse = (html, preloadedState, manifest) => {
   const mainStyles = manifest ? manifest["main.css"] : "assets/app.css";
   const mainBuild = manifest ? manifest["main.js"] : "assets/app.js";
+  const vendorBuild = manifest ? manifest["vendors.js"] : "assets/vendor.js";
   return `<!DOCTYPE html>
           <html>
             <head>
@@ -60,6 +61,7 @@ const setResponse = (html, preloadedState, manifest) => {
                 ).replace(/</g, "\\u003c")}
               </script>
               <script src="${mainBuild}" type="text/javascript"></script>
+              <script src="${vendorBuild}" type="text/javascript"></script>
             </body>
           </html>`;
 };
