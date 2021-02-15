@@ -1,8 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { setFavorite, deleteFavorite } from "../actions";
 import { Link } from "react-router-dom";
+import { setFavorite, deleteFavorite } from "../actions";
 import "../assets/styles/components/CarouselItem.scss";
 import playIcon from "../assets/static/play-icon.png";
 import plusIcon from "../assets/static/plus-icon.png";
@@ -56,7 +56,7 @@ const CarouselItem = (props) => {
             />
           )}
 
-          <img className="carousel" />
+          <img className="carousel" alt="carousel" />
         </div>
         <p className="carousel-item__details--title">{title}</p>
         <p className="carousel-item__details--subtitle">

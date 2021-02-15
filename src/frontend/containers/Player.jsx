@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
-import { Redirect } from "react-router-dom";
-import { getVideoSource } from "../actions";
-import "../assets/styles/components/Player.scss";
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import { getVideoSource } from '../actions';
+import '../assets/styles/components/Player.scss';
 
 const TEST_MP4 =
-  "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
+  'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
 
 const Player = (props) => {
   const { id } = props.match.params;
@@ -20,16 +20,19 @@ const Player = (props) => {
   }, []);
 
   return isLoading ? (
-    <h3>Cargando {JSON.stringify(props.playing)}</h3>
+    <h3>
+      Cargando
+      {JSON.stringify(props.playing)}
+    </h3>
   ) : hasPlaying ? (
-    <div className="player">
+    <div className='player'>
       <video controls autoPlay>
         {/* <source src={props.playing.source} type="video/mp4" /> */}
-        <source src={TEST_MP4} type="video/mp4" />
+        <source src={TEST_MP4} type='video/mp4' />
       </video>
-      <div className="Player-back">
+      <div className='Player-back'>
         <button
-          type="button"
+          type='button'
           onClick={() => {
             props.history.goBack();
           }}
@@ -39,7 +42,7 @@ const Player = (props) => {
       </div>
     </div>
   ) : (
-    <Redirect to="/404" />
+    <Redirect to='/404' />
   );
 };
 

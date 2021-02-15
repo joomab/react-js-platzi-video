@@ -1,11 +1,11 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import { Provider } from "react-redux";
-import { compose, createStore } from "redux";
-import { Router } from "react-router";
-import { createBrowserHistory } from "history";
-import App from "./routes/App";
-import reducer from "./reducers";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import { compose, createStore } from 'redux';
+import { Router } from 'react-router';
+import { createBrowserHistory } from 'history';
+import App from './routes/App';
+import reducer from './reducers';
 /* import initialState from "./initialState"; */
 
 const history = createBrowserHistory();
@@ -25,5 +25,5 @@ ReactDOM.hydrate(
       <App />
     </Router>
   </Provider>,
-  document.getElementById("app")
+  document.getElementById('app'),
 );

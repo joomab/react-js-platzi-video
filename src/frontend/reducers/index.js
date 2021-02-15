@@ -1,4 +1,4 @@
-import { actions } from "../actions";
+import { actions } from '../actions';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -10,7 +10,7 @@ const reducer = (state, action) => {
     case actions.DELETE_FAVORITE:
       return {
         ...state,
-        myList: state.myList.filter((items) => items.id !== action.payload),
+        myList: state.myList.filter(items => items.id !== action.payload),
       };
     case actions.LOGIN_REQUEST:
       return {
@@ -31,8 +31,8 @@ const reducer = (state, action) => {
       return {
         ...state,
         playing:
-          state.trends.find((item) => item.id === Number(action.payload)) ||
-          state.original.find((item) => item.id === Number(action.payload)) ||
+          state.trends.find(item => item.id === Number(action.payload)) ||
+          state.original.find(item => item.id === Number(action.payload)) ||
           [],
       };
     default:
